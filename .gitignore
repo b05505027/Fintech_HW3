@@ -1,1 +1,2 @@
 *.pages
+src/__pycache__/
