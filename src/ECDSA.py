@@ -55,7 +55,7 @@ def ecdsa_sign(message):
 def ecdsa_verify(message, signature):
     r, s = signature
 
-    # Step 1: Check that Q_A is not equal to the identity element O, and its coordinates are otherwise valid.
+    # Check that Q_A is not equal to the identity element O, and its coordinates are otherwise valid.
     if Q == (0, 0) or not is_point_on_curve(*Q):
         print('not on curve')
         return False
@@ -65,23 +65,23 @@ def ecdsa_verify(message, signature):
         print('n * Q != O')
         return False
 
-    # Step 1: Verify that r and s are integers in [1, n - 1].
+    # Verify that r and s are integers in [1, n - 1].
     if not (1 <= r < n) or not (1 <= s < n):
         print('r or s not in [1, n-1]')
         return False
 
-    # Step 2: Calculate z
+    # Calculate z
     message_bytes = message.encode('utf-8')
     message_hash = hashlib.sha256(message_bytes).digest()
     z = message_hash.hex().upper()
     z = gmpy2.mpz('0x' + z)
 
-    # Step 3: Calculate u1 = z * s^-1 mod n and u2 = r * s^-1 mod n.
+    # Calculate u1 = z * s^-1 mod n and u2 = r * s^-1 mod n.
     s_inv = gmpy2.invert(s, n)
     u1 = (z * s_inv) % n
     u2 = (r * s_inv) % n
 
-    # Step 5: Calculate the curve point (x1, y1) = u1 * G + u2 * Q_A.
+    # Calculate the curve point (x1, y1) = u1 * G + u2 * Q_A.
     point_u1G = scalar_multiplication_double_and_add(Gx, Gy, u1)
     point_u2Q = scalar_multiplication_double_and_add(*Q, u2)
     point_x1y1 = point_addition(point_u1G[0], point_u1G[1], point_u2Q[0], point_u2Q[1])
@@ -92,7 +92,7 @@ def ecdsa_verify(message, signature):
         return False
 
 
-    # Step 6: The signature is valid if r ≡ x1 (mod n), invalid otherwise.
+    # The signature is valid if r ≡ x1 (mod n), invalid otherwise.
     return r%n == point_x1y1[0] % n
 
 

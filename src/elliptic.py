@@ -41,11 +41,7 @@ def point_addition(x1, y1, x2, y2):
             m = (3 * x1 * x1 + a) * gmpy2.invert(2 * y1, p)
         except ZeroDivisionError:
             print("ZeroDivisionError")
-            print("x1: {}".format(x1))
-            print("y1: {}".format(y1))
-            print("x2: {}".format(x2))
-            print("y2: {}".format(y2))
-            input()
+            exit(0)
     elif x1 == x2:
         return (mpz(0), mpz(0))
     else:
